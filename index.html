@@ -33,8 +33,10 @@
 </head>
 <body>
     <script>
-        if(localStorage.ls === "NaN"){
-            localStorage.hs = 0
+        if(!localStorage.ls){
+            localStorage.ls = 0
+            console.log("Done")
+            
         }
         function star() {
             if(paddle.x >= display.canvas.width-50){
