@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My game </title>
+    <script src="tcjsgame.js"></script>
+
+    <style>
+        body{
+            background-color: black;
+
+        }
+        canvas{
+            background-color: greenyellow;
+            border: 3px green solid;
+            width: 70%;
+        }
+        button{
+            position: fixed;
+            font-size: 1cm;
+            opacity: 0.7;
+            width: 10%;
+            height: 10%;
+            transition: opacity 1s;
+            top: 300px;
+            
+        }
+        .rb{
+            left: 600px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if(!localStorage.hs){
+            localStorage.hs = 0
+        }
+        function star() {
+            if(paddle.x >= display.canvas.width-50){
+                paddle.x = display.canvas.width - 50
+            }if(paddle.x <= 0){
+                paddle.x = 0
+            }
+        }
+        let display = new Display()
+        display.start()
+        let paddle = new Component(50, 20, "green", 0,0)
+        display.add(paddle)
+        move.position(paddle, "bottom", offset=20)
+        window.addEventListener("keydown", (e)=>{
+            if(e.key==="d"){
+                paddle.speedX = 1.5
+            } if(e.key === "a"){
+                paddle.speedX = -1.5
+            }
+            star()
+        })
+        
+        window.addEventListener("keyup", (e)=>{
+            paddle.speedX =0
+            star()
+        })
+        let ball = new Component(10, 10, "green", Math.random()*100,20)
+        display.add(ball)
+        let text = new Component("20px", "Georgia","white", 10, 25, "text" )
+        let hss = new Component("20px", "Georgia","white", 200, 25, "text" )
+        
+
+        display.add(text)
+        display.add(hss)
+        count = 0
+        ball.speedX = 3
+        ball.speedY = 1
+        function update() {
+            //move.bound(ball)
+            ls = new Number(localStorage.ls)
+            if(paddle.x >= display.canvas.width-50){
+                paddle.x = display.canvas.width - 50
+            }if(paddle.x <= 0){
+                paddle.x = 0
+            }
+            text.text = "Score :"+ count
+            hss.text = "Highscore : "+ ls
+            if(ball.x >= display.canvas.width){
+                ball.speedX = -3
+            }if(ball.x <= 0){
+                ball.speedX = 3
+            }if(ball.y <= 0){
+                ball.speedY = 1
+            }if(ball.y >= display.canvas.height){
+                ball.x = Math.random()*333
+                ball.y = Math.random()*333
+                count = 0
+                alert("You lose")
+
+            }if(paddle.crashWith(ball)){
+                ball.speedY = 1
+                count += 1
+                ball.speedY = -1 * ball.speedY
+            }
+            
+            if(count > ls){
+                localStorage.ls = count
+            }
+            
+
+        }
+    </script>
+    <div class="lay">
+        <button class="lb" onmousedown="paddle.speedX = -1.5;star()" onmouseup="paddle.speedX =0; star()">⬅️</button> <button class="rb" onmousedown="paddle.speedX = 1.5;star()"  onmouseup="paddle.speedX =0; star()">➡️</button>
+    </div>
+</body>
+</html>
